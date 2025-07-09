@@ -73,8 +73,8 @@ func (ph *PlayerHandler) HandleItemUse(ctx *player.Context) {
 }
 
 func (ph *PlayerHandler) HandleItemUseOnBlock(ctx *player.Context, pos cube.Pos, face cube.Face, clickPos mgl64.Vec3) {
-	ctx.Cancel()
 	if mainHandVal(ctx.Val()) == "block" {
+		ctx.Cancel()
 		if time.Since(ph.lastExec) < 500*time.Millisecond {
 			ctx.Val().Message(text.Red + "You are interacting blocks too fast! TRY AGAIN.")
 			return
