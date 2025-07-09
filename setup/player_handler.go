@@ -162,7 +162,7 @@ func SendSetupItems(p *player.Player) {
 	_ = p.Inventory().SetItem(0, item.NewStack(item.Axe{Tier: item.ToolTierGold}, 1).WithValue("setup", "break").WithCustomName("[BREAK]"))
 	_ = p.Inventory().SetItem(1, item.NewStack(item.Axe{Tier: item.ToolTierStone}, 1).WithValue("setup", "block").WithCustomName("[BLOCK]"))
 	_ = p.Inventory().SetItem(2, item.NewStack(item.Axe{Tier: item.ToolTierDiamond}, 1).WithValue("setup", "forward").WithCustomName("PUSH YOUR CHARACTER TO FRONT"))
-	_ = p.Inventory().SetItem(3, item.NewStack(block.InvisibleBedrock{}, 1))
+	_ = p.Inventory().SetItem(3, item.NewStack(block.Barrier{}, 1))
 }
 
 func mainHandVal(p *player.Player) string {
