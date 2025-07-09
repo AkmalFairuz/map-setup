@@ -1,0 +1,6 @@
+.idea
+players/
+world/
+*_config.yml
+main.exe
+resources/
