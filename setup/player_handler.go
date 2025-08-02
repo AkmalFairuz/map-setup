@@ -2,6 +2,10 @@ package setup
 
 import (
 	"fmt"
+	"log/slog"
+	"strings"
+	"time"
+
 	"github.com/df-mc/dragonfly/server/block"
 	"github.com/df-mc/dragonfly/server/block/cube"
 	"github.com/df-mc/dragonfly/server/item"
@@ -11,9 +15,6 @@ import (
 	"github.com/df-mc/dragonfly/server/world/sound"
 	"github.com/go-gl/mathgl/mgl64"
 	"github.com/sandertv/gophertunnel/minecraft/text"
-	"log/slog"
-	"strings"
-	"time"
 )
 
 type PlayerHandler struct {
@@ -106,8 +107,10 @@ func (ph *PlayerHandler) HandleChat(ctx *player.Context, message *string) {
 			ph.setup = NewBedWarsSetup(name, false)
 		case "tb":
 			ph.setup = NewTheBridgeSetup(name)
+		case "d":
+			ph.setup = NewDuelsSetup(name)
 		default:
-			ctx.Val().Message(text.Colourf("<red>Unknown game: %s, available: <green>bw4, bw8, tb</green></red>", game))
+			ctx.Val().Message(text.Colourf("<red>Unknown game: %s, available: <green>bw4, bw8, tb, d</green></red>", game))
 			return
 		}
 		ph.log.Info("setup started", "game", game, "name", name)
