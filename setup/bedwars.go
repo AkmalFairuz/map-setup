@@ -2,9 +2,11 @@ package setup
 
 import (
 	"fmt"
+
 	"github.com/akmalfairuz/map-setup/setup/step"
 	"github.com/df-mc/dragonfly/server/block/cube"
-	"strings"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 type BedWarsTeamPosConfig map[string]cube.Pos
@@ -53,7 +55,9 @@ func BedWarsSteps(isSquads bool) []step.Step[BedWarsConfig] {
 		teams = append(teams, "aqua", "white", "pink", "gray")
 	}
 	for _, team := range teams {
-		teamName := strings.Title(team)
+		caser := cases.Title(language.English)
+		// teamName := strings.Title(team) // Deprecated
+		teamName := caser.String(team)
 		steps = append(steps, step.New(teamName+" Spawn Pos", func(t *BedWarsConfig, pos cube.Pos) {
 			pos[1] += 1
 			t.Spawn[team] = pos

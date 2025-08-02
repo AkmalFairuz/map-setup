@@ -2,11 +2,12 @@ package setup
 
 import (
 	"fmt"
-	"github.com/akmalfairuz/map-setup/setup/step"
-	"github.com/df-mc/dragonfly/server/block/cube"
-	"gopkg.in/yaml.v2"
 	"log/slog"
 	"os"
+
+	"github.com/akmalfairuz/map-setup/setup/step"
+	"github.com/df-mc/dragonfly/server/block/cube"
+	"gopkg.in/yaml.v3"
 )
 
 type ISetup interface {
@@ -79,6 +80,30 @@ func (s *Setup[T]) CurrentDescription() string {
 	}
 	return s.Steps[s.StepIndex].Description
 }
+
+// yaml Helpers
+
+type YamlNode = yaml.Node
+
+/*
+func posToList(pos cube.Pos) []int {
+	return []int{pos[0], pos[1], pos[2]}
+}
+*/
+
+func posToNode(pos cube.Pos) *yaml.Node {
+	return &yaml.Node{
+		Kind:  yaml.SequenceNode,
+		Style: yaml.FlowStyle,
+		Content: []*yaml.Node{
+			{Kind: yaml.ScalarNode, Value: fmt.Sprintf("%d", pos[0])},
+			{Kind: yaml.ScalarNode, Value: fmt.Sprintf("%d", pos[1])},
+			{Kind: yaml.ScalarNode, Value: fmt.Sprintf("%d", pos[2])},
+		},
+	}
+}
+
+// ------------
 
 type NopSetup struct{}
 

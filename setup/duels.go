@@ -6,18 +6,14 @@ import (
 )
 
 type DuelsConfig struct {
-	HeightLimit int                 `yaml:"height_limit"`
-	Void        int                 `yaml:"void"`
-	Center      cube.Pos            `yaml:"center"`
-	Spawns      map[string]cube.Pos `yaml:"spawns"`
-	SumoSpawns  map[string]cube.Pos `yaml:"sumo_spawns"`
-	SumoCenter  cube.Pos            `yaml:"sumo_center"`
+	Mid        *YamlNode   `yaml:"mid"`
+	Spawns     []*YamlNode `yaml:"spawns"`
+	SumoCenter *YamlNode   `yaml:"sumo_mid"`
+	SumoSpawns []*YamlNode `yaml:"sumo_spawns"`
 }
 
 func NewDuelsSetup(name string) ISetup {
 	var v DuelsConfig
-	v.Spawns = make(map[string]cube.Pos)
-	v.SumoSpawns = make(map[string]cube.Pos)
 	return &Setup[DuelsConfig]{
 		Name:  name,
 		Steps: DuelsSteps(),
@@ -27,25 +23,36 @@ func NewDuelsSetup(name string) ISetup {
 
 func DuelsSteps() []step.Step[DuelsConfig] {
 	var steps []step.Step[DuelsConfig]
-	teams := []string{"red", "blue"}
-	for _, t := range teams {
-		steps = append(steps, step.New("Player's Position for "+t, func(c *DuelsConfig, pos cube.Pos) {
-			pos[1] += 1
-			c.Spawns[t] = pos
-		}))
+
+	for i := 1; i <= 2; i++ {
+		index := i
+		steps = append(steps, step.New(
+			"Player Position-"+string(rune('0'+index)),
+			func(c *DuelsConfig, pos cube.Pos) {
+				pos[1] += 1
+				c.Spawns = append(c.Spawns, posToNode(pos))
+			},
+		))
 	}
+
 	steps = append(steps, step.New("Set Center Position (Normal)", func(c *DuelsConfig, pos cube.Pos) {
-		c.Center = pos
+		c.Mid = posToNode(pos)
 	}))
-	for _, t := range teams {
-		steps = append(steps, step.New("Player's Sumo Position for "+t, func(c *DuelsConfig, pos cube.Pos) {
-			pos[1] += 1
-			c.SumoSpawns[t] = pos
-		}))
+
+	for i := 1; i <= 2; i++ {
+		index := i
+		steps = append(steps, step.New(
+			"Sumo Player Position-"+string(rune('0'+index)),
+			func(c *DuelsConfig, pos cube.Pos) {
+				pos[1] += 1
+				c.SumoSpawns = append(c.SumoSpawns, posToNode(pos))
+			},
+		))
 	}
+
 	steps = append(steps, step.New("Set Center Position (Sumo)", func(c *DuelsConfig, pos cube.Pos) {
-		c.SumoCenter = pos
+		c.SumoCenter = posToNode(pos)
 	}))
-	//TODO: height limit and sumo void step
+
 	return steps
 }

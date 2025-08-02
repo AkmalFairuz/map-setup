@@ -109,8 +109,10 @@ func (ph *PlayerHandler) HandleChat(ctx *player.Context, message *string) {
 			ph.setup = NewTheBridgeSetup(name)
 		case "d":
 			ph.setup = NewDuelsSetup(name)
+		case "sw":
+			ph.setup = NewSkywarsSetup(name)
 		default:
-			ctx.Val().Message(text.Colourf("<red>Unknown game: %s, available: <green>bw4, bw8, tb, d</green></red>", game))
+			ctx.Val().Message(text.Colourf("<red>Unknown game: %s, available: <green>bw4, bw8, tb, sw, d</green></red>", game))
 			return
 		}
 		ph.log.Info("setup started", "game", game, "name", name)
