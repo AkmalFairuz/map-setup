@@ -122,13 +122,20 @@ func (ph *PlayerHandler) HandleChat(ctx *player.Context, message *string) {
 		ph.next(ctx.Val())
 	case "prev":
 		ph.prev(ctx.Val())
+	// Perintah "tp" digunakan untuk memindahkan (teleport) pemain ke koordinat tertentu di dunia game.
+	// Cara kerjanya:
+	// 1. Mengecek apakah jumlah argumen yang diberikan cukup (minimal 4: "tp", x, y, z).
+	// 2. Jika argumen kurang, akan mengirim pesan penggunaan yang benar ke pemain.
+	// 3. Jika argumen cukup, program mencoba membaca tiga angka (x, y, z) dari argumen dan mengubahnya menjadi posisi (cube.Pos).
+	// 4. Jika parsing gagal (misal, argumen bukan angka), akan mengirim pesan error "invalid coordinates".
+	// 5. Jika parsing berhasil, pemain akan dipindahkan ke posisi yang ditentukan menggunakan fungsi Teleport.
 	case "tp":
 		if len(parts) < 4 {
 			ctx.Val().Messagef("Usage: tp <x> <y> <z>")
 			return
 		}
 		var pos cube.Pos
-		if _, err := fmt.Sscanf(parts[0]+" "+parts[1]+" "+parts[2], "%d %d %d", &pos[0], &pos[1], &pos[2]); err != nil {
+		if _, err := fmt.Sscanf(parts[1]+" "+parts[2]+" "+parts[3], "%d %d %d", &pos[0], &pos[1], &pos[2]); err != nil {
 			ctx.Val().Messagef("invalid coordinates")
 			return
 		}
