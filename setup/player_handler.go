@@ -14,6 +14,7 @@ import (
 	"github.com/df-mc/dragonfly/server/world/particle"
 	"github.com/df-mc/dragonfly/server/world/sound"
 	"github.com/go-gl/mathgl/mgl64"
+	"github.com/samber/lo"
 	"github.com/sandertv/gophertunnel/minecraft/text"
 )
 
@@ -98,23 +99,28 @@ func (ph *PlayerHandler) HandleChat(ctx *player.Context, message *string) {
 			ctx.Val().Message(text.Colourf("<red>Usage: start [game] [name]</red>"))
 			return
 		}
+
+		setups := map[string]func(name string) ISetup{
+			"bw4": func(name string) ISetup {
+				return NewBedWarsSetup(name, true)
+			},
+			"bw8": func(name string) ISetup {
+				return NewBedWarsSetup(name, false)
+			},
+			"tb": NewTheBridgeSetup,
+			"d":  NewDuelsSetup,
+			"sw": NewSkywarsSetup,
+			"bf": NewBedFightSetup,
+		}
+
 		game := parts[1]
 		name := strings.Join(parts[2:], " ")
-		switch game {
-		case "bw4":
-			ph.setup = NewBedWarsSetup(name, true)
-		case "bw8":
-			ph.setup = NewBedWarsSetup(name, false)
-		case "tb":
-			ph.setup = NewTheBridgeSetup(name)
-		case "d":
-			ph.setup = NewDuelsSetup(name)
-		case "sw":
-			ph.setup = NewSkywarsSetup(name)
-		default:
-			ctx.Val().Message(text.Colourf("<red>Unknown game: %s, available: <green>bw4, bw8, tb, sw, d</green></red>", game))
+		setupFunc, ok := setups[game]
+		if !ok {
+			ctx.Val().Message(text.Colourf("<red>Unknown game: %s, available: <green>%s</green></red>", game, strings.Join(lo.Keys(setups), ", ")))
 			return
 		}
+		ph.setup = setupFunc(name)
 		ph.log.Info("setup started", "game", game, "name", name)
 		ph.setup.SetLog(ph.log)
 		ctx.Val().Message(text.Colourf("<green>Setup started for <yellow>%s</yellow>: <yellow>%s</yellow>. Please follow the instructions!</green>", game, name))

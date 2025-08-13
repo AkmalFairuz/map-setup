@@ -22,6 +22,7 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/muhammadmuzzammil1998/jsonc v1.0.0 // indirect
+	github.com/samber/lo v1.51.0 // indirect
 	github.com/sandertv/go-raknet v1.14.3-0.20250305181847-6af3e95113d6 // indirect
 	github.com/segmentio/fasthash v1.0.3 // indirect
 	golang.org/x/crypto v0.39.0 // indirect
