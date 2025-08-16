@@ -107,10 +107,11 @@ func (ph *PlayerHandler) HandleChat(ctx *player.Context, message *string) {
 			"bw8": func(name string) ISetup {
 				return NewBedWarsSetup(name, false)
 			},
-			"tb": NewTheBridgeSetup,
-			"d":  NewDuelsSetup,
-			"sw": NewSkywarsSetup,
-			"bf": NewBedFightSetup,
+			"tb":   NewTheBridgeSetup,
+			"d":    NewDuelsSetup,
+			"sw":   NewSkywarsSetup,
+			"bf":   NewBedFightSetup,
+			"cpvp": NewCrystalPVPSetup,
 		}
 
 		game := parts[1]
