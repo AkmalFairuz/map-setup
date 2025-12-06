@@ -112,6 +112,7 @@ func (ph *PlayerHandler) HandleChat(ctx *player.Context, message *string) {
 			"sw":   NewSkywarsSetup,
 			"bf":   NewBedFightSetup,
 			"cpvp": NewCrystalPVPSetup,
+			"hunt": NewPresentHuntSetup,
 		}
 
 		game := parts[1]
